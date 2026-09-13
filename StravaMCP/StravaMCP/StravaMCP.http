@@ -1,6 +1,58 @@
 @StravaMCP_HostAddress = http://localhost:5111
 
-GET {{StravaMCP_HostAddress}}/weatherforecast/
-Accept: application/json
+### Initialize
+POST {{StravaMCP_HostAddress}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
 
-###
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2025-06-18",
+    "capabilities": {},
+    "clientInfo": { "name": "http-client", "version": "0.1" }
+  }
+}
+
+### List tools
+POST {{StravaMCP_HostAddress}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/list"
+}
+
+### Call echo tool
+POST {{StravaMCP_HostAddress}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "tools/call",
+  "params": {
+    "name": "echo",
+    "arguments": { "message": "hello mcp" }
+  }
+}
+
+### Call add_numbers tool
+POST {{StravaMCP_HostAddress}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "tools/call",
+  "params": {
+    "name": "add_numbers",
+    "arguments": { "a": 5, "b": 37 }
+  }
+}
