@@ -8,6 +8,15 @@ A personal learning project: building a [Model Context Protocol](https://modelco
 
 MCP is JSON-RPC 2.0 over a transport. This project targets **Streamable HTTP**: a single endpoint (`POST /mcp`) that a client sends JSON-RPC requests to (`initialize`, `tools/list`, `tools/call`, ...) and gets JSON-RPC responses back.
 
+## Available tools
+
+Both variants expose the same four tools, backed by the real Strava API:
+
+- **`get_athlete_profile`** — the authenticated athlete's profile
+- **`get_recent_activities`** — the athlete's most recent activities (`count`, default 10)
+- **`get_activity_detail`** — details for a single activity (`activityId`)
+- **`get_athlete_stats`** — recent/year-to-date/all-time totals for runs, rides, and swims
+
 ## Project structure
 
 - **`StravaMCP.Strava`** — shared Strava OAuth token client + API wrapper, no ModelContextProtocol dependency
@@ -25,7 +34,7 @@ MCP is JSON-RPC 2.0 over a transport. This project targets **Streamable HTTP**: 
 
 ## Configuration & secrets
 
-.NET has no `.env`/`.env.example` equivalent. Instead: `appsettings.json` holds the non-secret shape (committed), and real secret values only ever go into [`dotnet user-secrets`](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) (never committed, stored outside the repo).
+Non-secret config lives in `appsettings.json` (committed); real secret values go into [`dotnet user-secrets`](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets) instead, which stores them outside the repo and never commits them.
 
 The `Strava` config section:
 
@@ -41,7 +50,7 @@ The `Strava` config section:
 
 - `ApiBaseUrl` / `TokenUrl` are safe, working defaults for everyone — already committed.
 - `ClientId` is a public identifier (it's visible in plain sight in the OAuth authorize URL), safe to commit.
-- `ClientSecret` and `RefreshToken` are real secrets — leave them empty in `appsettings.json` and set them via user-secrets instead:
+- `ClientSecret` and `RefreshToken` are real secrets — leave them empty in `appsettings.json` and set them via user-secrets instead.
 
 To get your own values:
 1. Register an app at [strava.com/settings/api](https://www.strava.com/settings/api) → note the `Client ID` / `Client Secret`.
@@ -92,7 +101,7 @@ dotnet test
 
 ## Connecting a real MCP client (e.g. Claude Code)
 
-With the server running:
+With the server running (either variant — swap the port for `FromScratchVariant`):
 
 ```bash
 claude mcp add --transport http --scope user strava-mcp http://localhost:5111/mcp
