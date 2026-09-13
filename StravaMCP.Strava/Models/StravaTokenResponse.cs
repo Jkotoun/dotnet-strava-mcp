@@ -10,7 +10,6 @@ public sealed record StravaTokenResponse
     [JsonPropertyName("refresh_token")]
     public required string RefreshToken { get; init; }
 
-    /// <summary>Unix timestamp (seconds) when the access token expires.</summary>
     [JsonPropertyName("expires_at")]
     public required long ExpiresAt { get; init; }
 }

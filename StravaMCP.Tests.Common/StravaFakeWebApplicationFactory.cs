@@ -7,11 +7,7 @@ using StravaMCP.Strava;
 
 namespace StravaMCP.Tests.Common;
 
-/// <summary>
-/// A WebApplicationFactory that fakes the Strava HTTP boundary (token endpoint + API endpoint) with
-/// canned responses, so tests exercise the real dispatcher/tool/StravaClient/StravaAuthClient code
-/// end-to-end without ever calling the live Strava API.
-/// </summary>
+/// <summary>Fakes the Strava HTTP boundary with canned responses so tests run end-to-end without calling the live API.</summary>
 public sealed class StravaFakeWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>
     where TProgram : class
 {

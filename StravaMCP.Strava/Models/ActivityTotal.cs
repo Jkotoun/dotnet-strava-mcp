@@ -4,9 +4,6 @@ namespace StravaMCP.Strava.Models;
 
 public sealed record ActivityTotal
 {
-    // Count/time/achievement fields are declared as double, not int: Strava's real stats
-    // response emits at least some of these as JSON numbers with a decimal point (e.g. "123.0"),
-    // which System.Text.Json's strict Int32 converter rejects outright.
     [JsonPropertyName("count")]
     public double Count { get; init; }
 
