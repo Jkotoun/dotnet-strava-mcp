@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StravaMCP.Server.SdkVariant\StravaMCP.Server.SdkVariant.csproj" />
+    <ProjectReference Include="..\StravaMCP.Server.FromScratchVariant\StravaMCP.Server.FromScratchVariant.csproj" />
     <ProjectReference Include="..\StravaMCP.Tests.Common\StravaMCP.Tests.Common.csproj" />
   </ItemGroup>
 

@@ -12,21 +12,23 @@ MCP is JSON-RPC 2.0 over a transport. This project targets **Streamable HTTP**: 
 
 ```
 StravaMCP.slnx
-├── StravaMCP.Strava/                      # shared: Strava OAuth token client + API wrapper.
-│                                           # No ModelContextProtocol dependency - used by both server variants below.
-├── StravaMCP.Strava.Tests/                 # unit tests for the shared library (no real network calls)
-├── StravaMCP.Server.SdkVariant/            # MCP server built with the official ModelContextProtocol SDK
-│   ├── Program.cs                          # MCP server wiring, maps POST /mcp
-│   ├── Tools/                              # [McpServerTool] tool definitions (mock + Strava)
-│   └── StravaMCP.http                      # sample JSON-RPC requests (Rider / REST Client)
-├── StravaMCP.Server.FromScratchVariant/    # MCP server with a hand-rolled JSON-RPC dispatch, no SDK
-│                                           # (scaffolded, not yet implemented)
-└── StravaMCP.Tests/                        # contract-level integration tests
-    ├── McpTestClient.cs                    # thin JSON-RPC client over /mcp
-    └── McpProtocolTests.cs
+├── StravaMCP.Strava/                        # shared: Strava OAuth token client + API wrapper.
+│                                             # No ModelContextProtocol dependency - used by both server variants below.
+├── StravaMCP.Strava.Tests/                  # unit tests for the shared library (no real network calls)
+├── StravaMCP.Server.SdkVariant/              # MCP server built with the official ModelContextProtocol SDK
+│   ├── Program.cs                            # MCP server wiring, maps POST /mcp
+│   ├── Tools/                                # [McpServerTool] tool definitions (mock + Strava)
+│   └── StravaMCP.http                        # sample JSON-RPC requests (Rider / REST Client)
+├── StravaMCP.Server.FromScratchVariant/      # MCP server with a hand-rolled JSON-RPC dispatch, no SDK
+│   ├── JsonRpc/                              # JsonRpcRequest/Response/Error DTOs
+│   ├── Mcp/                                  # IMcpTool, ToolRegistry, McpDispatcher
+│   └── Tools/                                # IMcpTool implementations (mock + Strava)
+├── StravaMCP.Tests.Common/                   # shared test infra: McpTestClient (JSON-RPC client over /mcp)
+├── StravaMCP.Tests/                          # contract tests against SdkVariant
+└── StravaMCP.Server.FromScratchVariant.Tests/ # the same contract tests against FromScratchVariant
 ```
 
-`SdkVariant` and `FromScratchVariant` are two independent, non-collaborating implementations of the same MCP server, kept side by side on purpose for comparison/learning — not a pipeline where one depends on the other.
+`SdkVariant` and `FromScratchVariant` are two independent, non-collaborating implementations of the same MCP server, kept side by side on purpose for comparison/learning — not a pipeline where one depends on the other. Both are exercised by the *same* contract-test assertions (`StravaMCP.Tests` / `StravaMCP.Server.FromScratchVariant.Tests`, sharing `McpTestClient` from `StravaMCP.Tests.Common`), so they double as an ongoing parity suite proving both behave identically.
 
 ## Prerequisites
 
@@ -67,15 +69,23 @@ To get your own values:
    dotnet user-secrets set "Strava:ClientSecret" "<secret>"
    dotnet user-secrets set "Strava:RefreshToken" "<refresh_token from step 3>"
    ```
+   `StravaMCP.Server.FromScratchVariant` intentionally shares the same `UserSecretsId` as `SdkVariant` (set directly in its `.csproj`), so both variants read the same secrets file — no need to redo this setup a second time for the same Strava account.
 
 ## Running locally
 
+Either variant works the same way, just on different ports:
+
 ```bash
-cd StravaMCP.Server.SdkVariant
+cd StravaMCP.Server.SdkVariant          # http://localhost:5111
 dotnet run --launch-profile http
 ```
 
-The server listens on `http://localhost:5111`, with the MCP endpoint at `POST /mcp`. Try it with the requests in `StravaMCP.http`, or by hand:
+```bash
+cd StravaMCP.Server.FromScratchVariant  # http://localhost:5155
+dotnet run --launch-profile http
+```
+
+The MCP endpoint is `POST /mcp` on both. Try `SdkVariant` with the requests in its `StravaMCP.http`, or by hand (works against either port — `FromScratchVariant` returns plain JSON, `SdkVariant` returns SSE-framed JSON, hence accepting both content types):
 
 ```bash
 curl -s http://localhost:5111/mcp \

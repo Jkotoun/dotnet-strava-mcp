@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using StravaMCP.Tests.Common;
 using Xunit;
 
-namespace StravaMCP.Tests;
+namespace StravaMCP.Server.FromScratchVariant.Tests;
 
 public sealed class McpProtocolTests : IClassFixture<WebApplicationFactory<Program>>
 {
