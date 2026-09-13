@@ -45,6 +45,10 @@ public sealed class McpProtocolTests : IClassFixture<WebApplicationFactory<Progr
 
         Assert.Contains("echo", toolNames);
         Assert.Contains("add_numbers", toolNames);
+        Assert.Contains("get_athlete_profile", toolNames);
+        Assert.Contains("get_recent_activities", toolNames);
+        Assert.Contains("get_activity_detail", toolNames);
+        Assert.Contains("get_athlete_stats", toolNames);
     }
 
     [Fact]
