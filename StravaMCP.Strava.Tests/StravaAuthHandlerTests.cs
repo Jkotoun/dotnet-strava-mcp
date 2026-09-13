@@ -8,15 +8,6 @@ namespace StravaMCP.Strava.Tests;
 
 public class StravaAuthHandlerTests
 {
-    private static StravaOptions CreateOptions() => new()
-    {
-        ClientId = "client-id",
-        ClientSecret = "client-secret",
-        RefreshToken = "refresh-token",
-        ApiBaseUrl = "https://www.strava.com/api/v3/",
-        TokenUrl = "https://www.strava.com/oauth/token",
-    };
-
     [Fact]
     public async Task SendAsync_AttachesBearerTokenFromAuthClient()
     {
@@ -31,7 +22,7 @@ public class StravaAuthHandlerTests
         });
         var authClient = new StravaAuthClient(
             new StubHttpClientFactory(new HttpClient(tokenHandler)),
-            Options.Create(CreateOptions()));
+            Options.Create(StravaOptionsFixture.Create()));
 
         var innerHandler = new StubHttpMessageHandler(_ => new HttpResponseMessage(HttpStatusCode.OK));
         var sut = new StravaAuthHandler(authClient) { InnerHandler = innerHandler };

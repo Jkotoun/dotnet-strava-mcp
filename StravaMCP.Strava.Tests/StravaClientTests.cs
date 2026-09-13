@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Http.Json;
-using Microsoft.Extensions.Options;
 using StravaMCP.Tests.Common;
 using Xunit;
 
@@ -8,18 +7,10 @@ namespace StravaMCP.Strava.Tests;
 
 public class StravaClientTests
 {
-    private static StravaClient CreateSut(StubHttpMessageHandler handler)
+    private static StravaClient CreateSut(StubHttpMessageHandler handler) => new(new HttpClient(handler)
     {
-        var options = Options.Create(new StravaOptions
-        {
-            ClientId = "id",
-            ClientSecret = "secret",
-            RefreshToken = "refresh",
-            ApiBaseUrl = "https://www.strava.com/api/v3/",
-            TokenUrl = "https://www.strava.com/oauth/token",
-        });
-        return new StravaClient(new HttpClient(handler), options);
-    }
+        BaseAddress = new Uri(StravaOptionsFixture.Create().ApiBaseUrl),
+    });
 
     [Fact]
     public async Task GetAthleteProfileAsync_RequestsTheCorrectUrl_AndDeserializesTheResponse()

@@ -1,18 +1,11 @@
 using System.Net.Http.Json;
-using Microsoft.Extensions.Options;
 using StravaMCP.Strava.Models;
 
 namespace StravaMCP.Strava;
 
-public sealed class StravaClient
+public sealed class StravaClient(HttpClient httpClient)
 {
-    private readonly HttpClient _httpClient;
-
-    public StravaClient(HttpClient httpClient, IOptions<StravaOptions> options)
-    {
-        _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri(options.Value.ApiBaseUrl);
-    }
+    private readonly HttpClient _httpClient = httpClient;
 
     public async Task<AthleteProfile> GetAthleteProfileAsync(CancellationToken ct) =>
         await _httpClient.GetFromJsonAsync<AthleteProfile>("athlete", ct)
