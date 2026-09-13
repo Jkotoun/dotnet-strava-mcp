@@ -8,20 +8,14 @@ namespace StravaMCP.Strava;
 /// Registered as a singleton (not via AddHttpClient&lt;T&gt;, which would make it transient) so the
 /// cached access token actually survives across requests instead of being reset on every injection.
 /// </summary>
-public sealed class StravaAuthClient : IDisposable
+public sealed class StravaAuthClient(IHttpClientFactory httpClientFactory, IOptions<StravaOptions> options) : IDisposable
 {
-    private readonly HttpClient _httpClient;
-    private readonly StravaOptions _options;
+    private readonly HttpClient _httpClient = httpClientFactory.CreateClient("StravaAuth");
+    private readonly StravaOptions _options = options.Value;
     private readonly SemaphoreSlim _refreshLock = new(1, 1);
 
     private string? _cachedAccessToken;
     private DateTimeOffset _cachedAccessTokenExpiresAt = DateTimeOffset.MinValue;
-
-    public StravaAuthClient(IHttpClientFactory httpClientFactory, IOptions<StravaOptions> options)
-    {
-        _httpClient = httpClientFactory.CreateClient("StravaAuth");
-        _options = options.Value;
-    }
 
     public async Task<string> GetAccessTokenAsync(CancellationToken ct)
     {
