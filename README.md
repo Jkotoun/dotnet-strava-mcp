@@ -11,8 +11,7 @@ MCP is JSON-RPC 2.0 over a transport. This project targets **Streamable HTTP**: 
 ## Project structure
 
 ```
-StravaMCP/
-├── StravaMCP.sln
+StravaMCP.sln
 ├── StravaMCP.Strava/                      # shared: Strava OAuth token client + API wrapper.
 │                                           # No ModelContextProtocol dependency - used by both server variants below.
 ├── StravaMCP.Strava.Tests/                 # unit tests for the shared library (no real network calls)
@@ -62,7 +61,7 @@ To get your own values:
      -d client_id=<ID> -d client_secret=<SECRET> \
      -d code=<CODE> -d grant_type=authorization_code
    ```
-4. From `StravaMCP/StravaMCP.Server.SdkVariant`:
+4. From `StravaMCP.Server.SdkVariant`:
    ```bash
    dotnet user-secrets init   # once per project
    dotnet user-secrets set "Strava:ClientSecret" "<secret>"
@@ -72,7 +71,7 @@ To get your own values:
 ## Running locally
 
 ```bash
-cd StravaMCP/StravaMCP.Server.SdkVariant
+cd StravaMCP.Server.SdkVariant
 dotnet run --launch-profile http
 ```
 
@@ -89,7 +88,6 @@ curl -s http://localhost:5111/mcp \
 ## Running tests
 
 ```bash
-cd StravaMCP
 dotnet test
 ```
 
