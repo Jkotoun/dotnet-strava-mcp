@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using StravaMCP.Tests.Common;
 using Xunit;
@@ -6,11 +8,13 @@ namespace StravaMCP.Server.FromScratchVariant.Tests;
 
 public sealed class McpProtocolTests : IClassFixture<StravaFakeWebApplicationFactory<Program>>
 {
+    private readonly HttpClient _httpClient;
     private readonly McpTestClient _client;
 
     public McpProtocolTests(StravaFakeWebApplicationFactory<Program> factory)
     {
-        _client = new McpTestClient(factory.CreateClient());
+        _httpClient = factory.CreateClient();
+        _client = new McpTestClient(_httpClient);
     }
 
     [Fact]
@@ -106,6 +110,73 @@ public sealed class McpProtocolTests : IClassFixture<StravaFakeWebApplicationFac
         using var content = JsonDocument.Parse(GetFirstContentText(response.Result!.Value)!);
         Assert.Equal(50000, content.RootElement.GetProperty("biggest_ride_distance").GetInt32());
         Assert.Equal(20, content.RootElement.GetProperty("all_run_totals").GetProperty("count").GetInt32());
+    }
+
+    [Fact]
+    public async Task ToolsCall_MissingToolName_ReturnsJsonRpcError()
+    {
+        var response = await _client.SendAsync("tools/call", new { arguments = new { } });
+
+        Assert.NotNull(response.Error);
+        Assert.Equal(-32602, response.Error!.Value.GetProperty("code").GetInt32());
+    }
+
+    [Fact]
+    public async Task ToolsCall_GetRecentActivities_DefaultsCountWhenArgumentOmitted()
+    {
+        var response = await _client.SendAsync("tools/call", new
+        {
+            name = "get_recent_activities",
+            arguments = new { },
+        });
+
+        Assert.Null(response.Error);
+        using var content = JsonDocument.Parse(GetFirstContentText(response.Result!.Value)!);
+        var activity = Assert.Single(content.RootElement.EnumerateArray());
+        Assert.Equal("Fake Ride", activity.GetProperty("name").GetString());
+    }
+
+    [Fact]
+    public async Task ToolsCall_ToolThrows_ReturnsIsErrorResult()
+    {
+        var response = await _client.SendAsync("tools/call", new
+        {
+            name = "get_activity_detail",
+            arguments = new { },
+        });
+
+        Assert.Null(response.Error);
+        Assert.True(response.Result!.Value.GetProperty("isError").GetBoolean());
+        Assert.Contains("get_activity_detail", GetFirstContentText(response.Result!.Value));
+    }
+
+    [Fact]
+    public async Task Notification_WithNoId_ReturnsAcceptedWithNoBody()
+    {
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "/mcp")
+        {
+            Content = JsonContent.Create(new { jsonrpc = "2.0", method = "tools/list" }),
+        };
+
+        using var httpResponse = await _httpClient.SendAsync(httpRequest);
+
+        Assert.Equal(HttpStatusCode.Accepted, httpResponse.StatusCode);
+        Assert.Empty(await httpResponse.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task MalformedRequestBody_ReturnsJsonRpcParseError()
+    {
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, "/mcp")
+        {
+            Content = new StringContent("not valid json", System.Text.Encoding.UTF8, "application/json"),
+        };
+
+        using var httpResponse = await _httpClient.SendAsync(httpRequest);
+
+        Assert.True(httpResponse.IsSuccessStatusCode);
+        using var document = JsonDocument.Parse(await httpResponse.Content.ReadAsStringAsync());
+        Assert.Equal(-32700, document.RootElement.GetProperty("error").GetProperty("code").GetInt32());
     }
 
     [Fact]
