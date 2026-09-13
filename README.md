@@ -98,3 +98,10 @@ With the server running:
 claude mcp add --transport http --scope user strava-mcp http://localhost:5111/mcp
 claude mcp list   # should show strava-mcp as Connected
 ```
+
+## Possible future improvements
+
+The goal here was refreshing .NET skills and learning MCP, not shipping a production service - so a couple of things were left out on purpose but could be added:
+
+- **Full OAuth2 authorization-code flow**, so each user connects their own Strava account instead of the server holding one shared refresh token.
+- **Cloud deployment/CI-CD** (Docker + a pipeline to GCP/Azure) to make it reachable by more than just its operator.
