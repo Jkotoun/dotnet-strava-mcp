@@ -13,9 +13,6 @@ public sealed class GetAthleteStatsTool(StravaClient stravaClient) : IMcpTool
 
     public JsonElement InputSchema { get; } = JsonDocument.Parse("""{"type":"object","properties":{}}""").RootElement;
 
-    public async Task<object?> ExecuteAsync(JsonElement arguments, CancellationToken ct)
-    {
-        var profile = await stravaClient.GetAthleteProfileAsync(ct);
-        return await stravaClient.GetAthleteStatsAsync(profile.Id, ct);
-    }
+    public async Task<object?> ExecuteAsync(JsonElement arguments, CancellationToken ct) =>
+        await stravaClient.GetAuthenticatedAthleteStatsAsync(ct);
 }

@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace StravaMCP.Strava;
+namespace StravaMCP.Strava.Models;
 
-public sealed class AthleteProfile
+public sealed record AthleteProfile
 {
     [JsonPropertyName("id")]
     public required long Id { get; init; }
