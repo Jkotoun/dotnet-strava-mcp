@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="StravaMCP.Server.FromScratchVariant/StravaMCP.Server.FromScratchVariant.csproj" />
+  <Project Path="StravaMCP.Server.SdkVariant/StravaMCP.Server.SdkVariant.csproj" />
+  <Project Path="StravaMCP.Strava.Tests/StravaMCP.Strava.Tests.csproj" />
+  <Project Path="StravaMCP.Strava/StravaMCP.Strava.csproj" />
+  <Project Path="StravaMCP.Tests/StravaMCP.Tests.csproj" />
+</Solution>

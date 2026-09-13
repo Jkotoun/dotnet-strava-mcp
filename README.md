@@ -11,7 +11,7 @@ MCP is JSON-RPC 2.0 over a transport. This project targets **Streamable HTTP**: 
 ## Project structure
 
 ```
-StravaMCP.sln
+StravaMCP.slnx
 ├── StravaMCP.Strava/                      # shared: Strava OAuth token client + API wrapper.
 │                                           # No ModelContextProtocol dependency - used by both server variants below.
 ├── StravaMCP.Strava.Tests/                 # unit tests for the shared library (no real network calls)
