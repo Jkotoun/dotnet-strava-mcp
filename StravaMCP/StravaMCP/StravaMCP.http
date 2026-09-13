@@ -1,6 +1,0 @@
-@StravaMCP_HostAddress = http://localhost:5111
-
-GET {{StravaMCP_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
