@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StravaMCP.Strava;
 
@@ -13,6 +14,19 @@ public sealed class StravaFakeWebApplicationFactory<TProgram> : WebApplicationFa
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureAppConfiguration((_, config) =>
+        {
+            var options = StravaOptionsFixture.Create();
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Strava:ClientId"] = options.ClientId,
+                ["Strava:ClientSecret"] = options.ClientSecret,
+                ["Strava:RefreshToken"] = options.RefreshToken,
+                ["Strava:ApiBaseUrl"] = options.ApiBaseUrl,
+                ["Strava:TokenUrl"] = options.TokenUrl,
+            });
+        });
+
         builder.ConfigureServices(services =>
         {
             services.AddHttpClient("StravaAuth")
