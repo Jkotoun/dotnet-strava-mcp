@@ -1,7 +1,7 @@
-namespace StravaMCP.Strava.Tests;
+namespace StravaMCP.Tests.Common;
 
 /// <summary>Test double for HttpClient: no real network calls, just canned responses.</summary>
-internal sealed class StubHttpMessageHandler(Func<HttpRequestMessage, HttpResponseMessage> responder) : HttpMessageHandler
+public sealed class StubHttpMessageHandler(Func<HttpRequestMessage, HttpResponseMessage> responder) : HttpMessageHandler
 {
     public int CallCount { get; private set; }
     public HttpRequestMessage? LastRequest { get; private set; }
@@ -21,7 +21,7 @@ internal sealed class StubHttpMessageHandler(Func<HttpRequestMessage, HttpRespon
     }
 }
 
-internal sealed class StubHttpClientFactory(HttpClient client) : IHttpClientFactory
+public sealed class StubHttpClientFactory(HttpClient client) : IHttpClientFactory
 {
     public HttpClient CreateClient(string name) => client;
 }
