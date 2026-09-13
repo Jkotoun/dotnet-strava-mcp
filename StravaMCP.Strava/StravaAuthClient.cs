@@ -4,10 +4,7 @@ using StravaMCP.Strava.Models;
 
 namespace StravaMCP.Strava;
 
-/// <summary>
-/// Registered as a singleton (not via AddHttpClient&lt;T&gt;, which would make it transient) so the
-/// cached access token actually survives across requests instead of being reset on every injection.
-/// </summary>
+/// <summary>Registered as a singleton so the cached access token survives across requests.</summary>
 public sealed class StravaAuthClient(IHttpClientFactory httpClientFactory, IOptions<StravaOptions> options) : IDisposable
 {
     private readonly HttpClient _httpClient = httpClientFactory.CreateClient("StravaAuth");

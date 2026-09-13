@@ -23,7 +23,6 @@ public static class StravaFixtures
         {"biggest_ride_distance":50000,"biggest_climb_elevation_gain":500,"recent_run_totals":{"count":1,"distance":5000,"moving_time":1500,"elapsed_time":1600,"elevation_gain":20,"achievement_count":0},"recent_ride_totals":{"count":1,"distance":10000,"moving_time":1800,"elapsed_time":1900,"elevation_gain":50,"achievement_count":0},"recent_swim_totals":{"count":0,"distance":0,"moving_time":0,"elapsed_time":0,"elevation_gain":0,"achievement_count":0},"ytd_run_totals":{"count":10,"distance":50000,"moving_time":15000,"elapsed_time":16000,"elevation_gain":200,"achievement_count":0},"ytd_ride_totals":{"count":10,"distance":100000,"moving_time":18000,"elapsed_time":19000,"elevation_gain":500,"achievement_count":0},"ytd_swim_totals":{"count":0,"distance":0,"moving_time":0,"elapsed_time":0,"elevation_gain":0,"achievement_count":0},"all_run_totals":{"count":20,"distance":100000,"moving_time":30000,"elapsed_time":32000,"elevation_gain":400,"achievement_count":0},"all_ride_totals":{"count":20,"distance":200000,"moving_time":36000,"elapsed_time":38000,"elevation_gain":1000,"achievement_count":0},"all_swim_totals":{"count":0,"distance":0,"moving_time":0,"elapsed_time":0,"elevation_gain":0,"achievement_count":0}}
         """;
 
-    /// <summary>Routes a fake Strava API request to the matching canned response by path.</summary>
     public static string ResponseFor(Uri requestUri)
     {
         var path = requestUri.AbsolutePath;

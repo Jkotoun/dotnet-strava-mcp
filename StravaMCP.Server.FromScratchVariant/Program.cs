@@ -8,10 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddStravaApi(builder.Configuration);
 
-// Scoped, not singleton: these depend (transitively) on the typed StravaClient, which AddHttpClient<T>()
-// registers as Transient (a new instance per resolution). A singleton registration here would capture
-// one StravaClient/HttpClient for the app's entire lifetime, defeating the factory's handler rotation
-// (captive dependency) - Scoped keeps a fresh StravaClient per request, same as the tools resolving it.
+// Scoped, not singleton: a singleton here would capture one StravaClient/HttpClient for the app's
+// lifetime, defeating AddHttpClient<T>()'s handler rotation (captive dependency).
 builder.Services.AddScoped<IMcpTool, GetAthleteProfileTool>();
 builder.Services.AddScoped<IMcpTool, GetRecentActivitiesTool>();
 builder.Services.AddScoped<IMcpTool, GetActivityDetailTool>();

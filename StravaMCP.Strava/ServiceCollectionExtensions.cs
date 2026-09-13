@@ -6,7 +6,6 @@ namespace StravaMCP.Strava;
 
 public static class ServiceCollectionExtensions
 {
-    /// <summary>Registers the Strava OAuth2/API client stack shared by both server variants.</summary>
     public static IServiceCollection AddStravaApi(this IServiceCollection services, IConfiguration configuration)
     {
         services
