@@ -46,13 +46,13 @@ public sealed class McpDispatcher(ToolRegistry registry, ILogger<McpDispatcher> 
             logger.LogError(ex, "Tool '{ToolName}' threw while handling a tools/call request.", toolName);
             return Ok(request.Id, new
             {
-                content = new[] { new { type = "text", text = $"An error occurred invoking '{toolName}'." } },
+                content = new[] { new { type = "text", text = $"An error occurred invoking '{toolName}': {ex.Message}" } },
                 isError = true,
             });
         }
     }
 
-    private object BuildInitializeResult() => new
+    private static object BuildInitializeResult() => new
     {
         protocolVersion = "2025-06-18",
         capabilities = new { tools = new { } },

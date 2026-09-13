@@ -13,6 +13,13 @@ public sealed class GetActivityDetailTool(StravaClient stravaClient) : IMcpTool
         {"type":"object","properties":{"activityId":{"type":"integer","description":"The Strava activity ID."}},"required":["activityId"]}
         """).RootElement;
 
-    public async Task<object?> ExecuteAsync(JsonElement arguments, CancellationToken ct) =>
-        await stravaClient.GetActivityDetailAsync(arguments.GetProperty("activityId").GetInt64(), ct);
+    public async Task<object?> ExecuteAsync(JsonElement arguments, CancellationToken ct)
+    {
+        if (arguments.ValueKind != JsonValueKind.Object || !arguments.TryGetProperty("activityId", out var activityIdElement))
+        {
+            throw new ArgumentException("Missing required argument 'activityId'.");
+        }
+
+        return await stravaClient.GetActivityDetailAsync(activityIdElement.GetInt64(), ct);
+    }
 }
