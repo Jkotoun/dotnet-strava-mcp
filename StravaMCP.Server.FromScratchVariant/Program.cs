@@ -13,8 +13,6 @@ builder.Services
     .AddHttpClient<StravaClient>()
     .AddHttpMessageHandler<StravaAuthHandler>();
 
-builder.Services.AddSingleton<IMcpTool, EchoTool>();
-builder.Services.AddSingleton<IMcpTool, AddNumbersTool>();
 builder.Services.AddSingleton<IMcpTool, GetAthleteProfileTool>();
 builder.Services.AddSingleton<IMcpTool, GetRecentActivitiesTool>();
 builder.Services.AddSingleton<IMcpTool, GetActivityDetailTool>();

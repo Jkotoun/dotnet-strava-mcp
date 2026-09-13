@@ -17,12 +17,12 @@ StravaMCP.slnx
 ├── StravaMCP.Strava.Tests/                  # unit tests for the shared library (no real network calls)
 ├── StravaMCP.Server.SdkVariant/              # MCP server built with the official ModelContextProtocol SDK
 │   ├── Program.cs                            # MCP server wiring, maps POST /mcp
-│   ├── Tools/                                # [McpServerTool] tool definitions (mock + Strava)
+│   ├── Tools/                                # [McpServerTool] Strava tool definitions
 │   └── StravaMCP.http                        # sample JSON-RPC requests (Rider / REST Client)
 ├── StravaMCP.Server.FromScratchVariant/      # MCP server with a hand-rolled JSON-RPC dispatch, no SDK
 │   ├── JsonRpc/                              # JsonRpcRequest/Response/Error DTOs
 │   ├── Mcp/                                  # IMcpTool, ToolRegistry, McpDispatcher
-│   └── Tools/                                # IMcpTool implementations (mock + Strava)
+│   └── Tools/                                # IMcpTool Strava tool implementations
 ├── StravaMCP.Tests.Common/                   # shared test infra: McpTestClient (JSON-RPC client over /mcp)
 ├── StravaMCP.Tests/                          # contract tests against SdkVariant
 └── StravaMCP.Server.FromScratchVariant.Tests/ # the same contract tests against FromScratchVariant

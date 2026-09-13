@@ -27,7 +27,7 @@ Accept: application/json, text/event-stream
   "method": "tools/list"
 }
 
-### Call echo tool
+### Call get_athlete_profile tool
 POST {{StravaMCP_HostAddress}}/mcp
 Content-Type: application/json
 Accept: application/json, text/event-stream
@@ -37,12 +37,12 @@ Accept: application/json, text/event-stream
   "id": 3,
   "method": "tools/call",
   "params": {
-    "name": "echo",
-    "arguments": { "message": "hello mcp" }
+    "name": "get_athlete_profile",
+    "arguments": {}
   }
 }
 
-### Call add_numbers tool
+### Call get_recent_activities tool
 POST {{StravaMCP_HostAddress}}/mcp
 Content-Type: application/json
 Accept: application/json, text/event-stream
@@ -52,7 +52,7 @@ Accept: application/json, text/event-stream
   "id": 4,
   "method": "tools/call",
   "params": {
-    "name": "add_numbers",
-    "arguments": { "a": 5, "b": 37 }
+    "name": "get_recent_activities",
+    "arguments": { "count": 5 }
   }
 }
