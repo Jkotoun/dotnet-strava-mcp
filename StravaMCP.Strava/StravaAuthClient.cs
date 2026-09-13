@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
+using StravaMCP.Strava.Models;
 
 namespace StravaMCP.Strava;
 
@@ -7,7 +8,7 @@ namespace StravaMCP.Strava;
 /// Registered as a singleton (not via AddHttpClient&lt;T&gt;, which would make it transient) so the
 /// cached access token actually survives across requests instead of being reset on every injection.
 /// </summary>
-public sealed class StravaAuthClient
+public sealed class StravaAuthClient : IDisposable
 {
     private readonly HttpClient _httpClient;
     private readonly StravaOptions _options;
@@ -68,4 +69,6 @@ public sealed class StravaAuthClient
     // One minute of slack so an in-flight request never gets handed a token that expires mid-call.
     private bool IsCachedTokenValid() =>
         _cachedAccessToken is not null && DateTimeOffset.UtcNow < _cachedAccessTokenExpiresAt - TimeSpan.FromMinutes(1);
+
+    public void Dispose() => _refreshLock.Dispose();
 }

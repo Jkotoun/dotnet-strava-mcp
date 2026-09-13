@@ -1,9 +1,10 @@
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using StravaMCP.Server.FromScratchVariant.JsonRpc;
 
 namespace StravaMCP.Server.FromScratchVariant.Mcp;
 
-public sealed class McpDispatcher(ToolRegistry registry)
+public sealed class McpDispatcher(ToolRegistry registry, ILogger<McpDispatcher> logger)
 {
     public async Task<JsonRpcResponse> HandleAsync(JsonRpcRequest request, CancellationToken ct)
     {
@@ -40,8 +41,9 @@ public sealed class McpDispatcher(ToolRegistry registry)
             var text = result is string resultString ? resultString : JsonSerializer.Serialize(result);
             return Ok(request.Id, new { content = new[] { new { type = "text", text } } });
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Tool '{ToolName}' threw while handling a tools/call request.", toolName);
             return Ok(request.Id, new
             {
                 content = new[] { new { type = "text", text = $"An error occurred invoking '{toolName}'." } },
@@ -67,8 +69,10 @@ public sealed class McpDispatcher(ToolRegistry registry)
         }),
     };
 
-    private static JsonRpcResponse Ok(JsonElement id, object result) => new() { Id = id, Result = result };
+    private static JsonRpcResponse Ok(JsonElement id, object result) => new() { Id = NormalizeId(id), Result = result };
 
     private static JsonRpcResponse Error(JsonElement id, int code, string message) =>
-        new() { Id = id, Error = new JsonRpcError { Code = code, Message = message } };
+        new() { Id = NormalizeId(id), Error = new JsonRpcError { Code = code, Message = message } };
+
+    private static JsonElement? NormalizeId(JsonElement id) => id.ValueKind == JsonValueKind.Undefined ? null : id;
 }

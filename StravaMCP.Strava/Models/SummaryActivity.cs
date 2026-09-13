@@ -1,17 +1,14 @@
 using System.Text.Json.Serialization;
 
-namespace StravaMCP.Strava;
+namespace StravaMCP.Strava.Models;
 
-public sealed class DetailedActivity
+public sealed record SummaryActivity
 {
     [JsonPropertyName("id")]
     public required long Id { get; init; }
 
     [JsonPropertyName("name")]
     public string? Name { get; init; }
-
-    [JsonPropertyName("description")]
-    public string? Description { get; init; }
 
     [JsonPropertyName("distance")]
     public double Distance { get; init; }
@@ -42,12 +39,6 @@ public sealed class DetailedActivity
 
     [JsonPropertyName("average_heartrate")]
     public double? AverageHeartrate { get; init; }
-
-    [JsonPropertyName("max_heartrate")]
-    public double? MaxHeartrate { get; init; }
-
-    [JsonPropertyName("calories")]
-    public double? Calories { get; init; }
 
     [JsonPropertyName("kudos_count")]
     public int KudosCount { get; init; }

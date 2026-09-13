@@ -1,5 +1,4 @@
 using StravaMCP.Strava;
-using StravaMCP.Tools;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,13 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.Configure<StravaOptions>(builder.Configuration.GetSection("Strava"));
-builder.Services.AddHttpClient("StravaAuth");
-builder.Services.AddSingleton<StravaAuthClient>();
-builder.Services.AddTransient<StravaAuthHandler>();
-builder.Services
-    .AddHttpClient<StravaClient>()
-    .AddHttpMessageHandler<StravaAuthHandler>();
+builder.Services.AddStravaApi(builder.Configuration);
 
 builder.Services
     .AddMcpServer()

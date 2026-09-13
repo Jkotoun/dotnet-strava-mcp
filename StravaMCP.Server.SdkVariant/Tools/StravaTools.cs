@@ -1,8 +1,9 @@
 using System.ComponentModel;
 using ModelContextProtocol.Server;
 using StravaMCP.Strava;
+using StravaMCP.Strava.Models;
 
-namespace StravaMCP.Tools;
+namespace StravaMCP.Server.SdkVariant.Tools;
 
 [McpServerToolType]
 public sealed class StravaTools(StravaClient stravaClient)
@@ -24,9 +25,6 @@ public sealed class StravaTools(StravaClient stravaClient)
         stravaClient.GetActivityDetailAsync(activityId, cancellationToken);
 
     [McpServerTool, Description("Gets the authenticated athlete's activity totals (recent, year-to-date, all-time) for runs, rides, and swims.")]
-    public async Task<ActivityStats> GetAthleteStats(CancellationToken cancellationToken = default)
-    {
-        var profile = await stravaClient.GetAthleteProfileAsync(cancellationToken);
-        return await stravaClient.GetAthleteStatsAsync(profile.Id, cancellationToken);
-    }
+    public Task<ActivityStats> GetAthleteStats(CancellationToken cancellationToken = default) =>
+        stravaClient.GetAuthenticatedAthleteStatsAsync(cancellationToken);
 }

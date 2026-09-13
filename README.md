@@ -10,23 +10,12 @@ MCP is JSON-RPC 2.0 over a transport. This project targets **Streamable HTTP**: 
 
 ## Project structure
 
-```
-StravaMCP.slnx
-├── StravaMCP.Strava/                        # shared: Strava OAuth token client + API wrapper.
-│                                             # No ModelContextProtocol dependency - used by both server variants below.
-├── StravaMCP.Strava.Tests/                  # unit tests for the shared library (no real network calls)
-├── StravaMCP.Server.SdkVariant/              # MCP server built with the official ModelContextProtocol SDK
-│   ├── Program.cs                            # MCP server wiring, maps POST /mcp
-│   ├── Tools/                                # [McpServerTool] Strava tool definitions
-│   └── StravaMCP.http                        # sample JSON-RPC requests (Rider / REST Client)
-├── StravaMCP.Server.FromScratchVariant/      # MCP server with a hand-rolled JSON-RPC dispatch, no SDK
-│   ├── JsonRpc/                              # JsonRpcRequest/Response/Error DTOs
-│   ├── Mcp/                                  # IMcpTool, ToolRegistry, McpDispatcher
-│   └── Tools/                                # IMcpTool Strava tool implementations
-├── StravaMCP.Tests.Common/                   # shared test infra: McpTestClient (JSON-RPC client over /mcp)
-├── StravaMCP.Tests/                          # contract tests against SdkVariant
-└── StravaMCP.Server.FromScratchVariant.Tests/ # the same contract tests against FromScratchVariant
-```
+- **`StravaMCP.Strava`** — shared Strava OAuth token client + API wrapper, no ModelContextProtocol dependency
+- **`StravaMCP.Server.SdkVariant`** — MCP server built with the official ModelContextProtocol SDK
+- **`StravaMCP.Server.FromScratchVariant`** — MCP server with a hand-rolled JSON-RPC dispatcher, no SDK
+- **`StravaMCP.Strava.Tests`** — unit tests for the shared library (no real network calls)
+- **`StravaMCP.Tests.Common`** — shared test infra (`McpTestClient`, fake Strava HTTP boundary)
+- **`StravaMCP.Tests`** / **`StravaMCP.Server.FromScratchVariant.Tests`** — the same contract tests run against each variant
 
 `SdkVariant` and `FromScratchVariant` are two independent, non-collaborating implementations of the same MCP server, kept side by side on purpose for comparison/learning — not a pipeline where one depends on the other. Both are exercised by the *same* contract-test assertions (`StravaMCP.Tests` / `StravaMCP.Server.FromScratchVariant.Tests`, sharing `McpTestClient` from `StravaMCP.Tests.Common`), so they double as an ongoing parity suite proving both behave identically.
 

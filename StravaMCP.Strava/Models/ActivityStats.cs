@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace StravaMCP.Strava;
+namespace StravaMCP.Strava.Models;
 
-public sealed class ActivityStats
+public sealed record ActivityStats
 {
     [JsonPropertyName("biggest_ride_distance")]
     public double? BiggestRideDistance { get; init; }

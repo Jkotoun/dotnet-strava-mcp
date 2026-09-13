@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
+using StravaMCP.Tests.Common;
 using Xunit;
 
 namespace StravaMCP.Strava.Tests;

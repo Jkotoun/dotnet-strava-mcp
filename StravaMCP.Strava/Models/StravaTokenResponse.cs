@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace StravaMCP.Strava;
+namespace StravaMCP.Strava.Models;
 
-public sealed class StravaTokenResponse
+public sealed record StravaTokenResponse
 {
     [JsonPropertyName("access_token")]
     public required string AccessToken { get; init; }
