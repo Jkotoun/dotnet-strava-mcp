@@ -24,3 +24,5 @@ app.UseHttpsRedirection();
 app.MapMcp("/mcp");
 
 app.Run();
+
+public partial class Program;
